@@ -57,9 +57,12 @@
         
     </footer>
 
-    <script type="module" src="js/conexion.js"></script>
     <script type="module">
         import { login } from './js/auth.js';
+        import { redirigirSiHaySesion } from './js/nav.js';
+
+        // Si ya hay sesión activa, no mostrar el login
+        redirigirSiHaySesion('index.html');
 
         // Manejar el inicio de sesión
         document.getElementById('form-login').addEventListener('submit', (e) => {

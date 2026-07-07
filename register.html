@@ -42,7 +42,11 @@
 
                 <div class="form-group">
                     <label for="phone">Celular</label>
-                    <input type="tel" id="phone" name="phone" placeholder="+507 6000-0000" required>
+                    <div class="phone-input-wrapper">
+                        <span class="phone-prefix">+507</span>
+                        <input type="tel" id="phone" name="phone" placeholder="6000-0000"
+                            maxlength="8" inputmode="numeric" required>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -67,20 +71,34 @@
     <footer class="footer">
         
     </footer>
-    <script type="module" src="js/conexion.js"></script>
+    <script>
+        document.getElementById('phone').addEventListener('input', (e) => {
+            e.target.value = e.target.value.replace(/\D/g, '').slice(0, 8);
+        });
+    </script>
     <script type="module">
         import { registrar } from './js/auth.js';
+        import { redirigirSiHaySesion } from './js/nav.js';
 
-        // Manejar el registro
+        // Si ya hay sesión activa, no mostrar el formulario de registro
+        redirigirSiHaySesion('index.html');
+
         document.getElementById('form-registro').addEventListener('submit', (e) => {
-        e.preventDefault();
-        const name = document.getElementById('name').value;
-        const phone = document.getElementById('phone').value;
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        registrar(email, password, name, phone);
-        });
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const phoneDigits = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const whatsapp = document.querySelector('[name="whatsapp_contact"]').checked;
 
+            if (phoneDigits.length !== 8) {
+                alert('El celular debe tener exactamente 8 dígitos.');
+                return;
+            }
+
+            const phone = phoneDigits;
+            registrar(email, password, name, phone, whatsapp);
+        });
     </script>
 </body>
 
